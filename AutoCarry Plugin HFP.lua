@@ -155,7 +155,6 @@ if Ignitetarget and DLib:IsKillable(Ignitetarget, MainCombo) then
 CastSpell(_IGNITE, Ignitetarget)
 end
 end
-
 UseSpells(Menu.Combo.UseQ, Menu.Combo.UseR)
 SetAttacks()
 end
