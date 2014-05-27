@@ -80,6 +80,7 @@ Menu.Combo:addParam("UseQ", "Use Q in combo", SCRIPT_PARAM_ONOFF , true)
 Menu.Combo:addParam("UseR", "Use R in combo", SCRIPT_PARAM_ONOFF , true)
 Menu.Combo:addParam("UseAutoE", "Use E in enemy stanable", SCRIPT_PARAM_ONOFF , true)
 Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
+Menu.Combo:addParam("BRKUse", "BRK Health Use", SCRIPT_PARAM_SLICE, .85, 0, 1, 2)
 Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
 Menu:addSubMenu("Drawings", "Drawings")
@@ -139,7 +140,7 @@ function Combo()
 	if DFGREADY then CastSpell(DFGSlot, target) end
           if HXGREADY then CastSpell(HXGSlot, target) end
           if BWCREADY then CastSpell(BWCSlot, target) end
-          if BRKREADY and player.health/player.maxHealth <= VayneParameters.BRKUSE then CastSpell(BRKSlot, target) end
+          if BRKREADY and player.health/player.maxHealth <= Menu.Combo.BRKUSE then CastSpell(BRKSlot, target) end
           if SOTDREADY then CastSpell(SOTDSlot) end
           if EntropyREADY then CastSpell(EntropySlot) end
           if YGREADY then CastSpell(YGSlot) end
