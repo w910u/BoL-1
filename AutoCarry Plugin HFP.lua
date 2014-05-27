@@ -1,4 +1,4 @@
-local version = "0.07"
+local version = "0.08"
 local scriptname = "AutoCarry Plugin HFP"
 -----
 _G.AutoCarry_AutoUpdate = true
@@ -135,18 +135,19 @@ function AgainstWall(Target)
 end
 
 function Combo()
-	if DFGREADY then CastSpell(DFGSlot, ts.target) end
-          if HXGREADY then CastSpell(HXGSlot, ts.target) end
-          if BWCREADY then CastSpell(BWCSlot, ts.target) end
-          if BRKREADY and player.health/player.maxHealth <= VayneParameters.BRKUSE then CastSpell(BRKSlot, ts.target) end
+	local target = STS:GetTarget(1000,n)
+	if DFGREADY then CastSpell(DFGSlot, target) end
+          if HXGREADY then CastSpell(HXGSlot, target) end
+          if BWCREADY then CastSpell(BWCSlot, target) end
+          if BRKREADY and player.health/player.maxHealth <= VayneParameters.BRKUSE then CastSpell(BRKSlot, target) end
           if SOTDREADY then CastSpell(SOTDSlot) end
           if EntropyREADY then CastSpell(EntropySlot) end
           if YGREADY then CastSpell(YGSlot) end
           if HEALTHREADY then CastSpell(HEALTHSlot) end
           if MANAREADY then CastSpell(MANASlot) end
-          if TMTREADY and GetDistance(ts.target) < 275 then CastSpell(TMTSlot) end
-          if RAHREADY and GetDistance(ts.target) < 275 then CastSpell(RAHSlot) end
-          if RNDREADY and GetDistance(ts.target) < 275 then CastSpell(RNDSlot) end
+          if TMTREADY and GetDistance(target) < 275 then CastSpell(TMTSlot) end
+          if RAHREADY and GetDistance(target) < 275 then CastSpell(RAHSlot) end
+          if RNDREADY and GetDistance(target) < 275 then CastSpell(RNDSlot) end
 if Menu.Combo.UseR and RREADY then
 	CastSpell(_R)
 end
