@@ -1,9 +1,11 @@
 local version = 0.1
 local autoupdate = false
-local scriptname = "AutoCarry Plugin HFP"
+local scriptname = "AutoCarry_Plugin_HFP"
 -----
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
+local UPDATE_HOST = "raw.github.com"
+local UPDATE_PATH = "/HFPDarkAlex/BoL/master/"..scriptname..".lua".."?rand="..math.random(1,10000)
 
 if FileExist(SOURCELIB_PATH) then
 	require("SourceLib")
@@ -15,8 +17,23 @@ end
 if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait...") return end
 
 if AUTOUPDATE then
-	 SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/HFPDarkAlex/master/"..SCRIPT_NAME..".lua", SCRIPT_PATH .. 
-GetCurrentEnv().FILE_NAME, "/honda7/BoL/master/VersionFiles/"..SCRIPT_NAME..".version"):CheckUpdate()
+	 local ServerData = GetWebResult(UPDATE_HOST, UPDATE_PATH)
+	if ServerData then
+		local ServerVersion = string.match(ServerData, "local version = \"%d+.%d+\"")
+		ServerVersion = string.match(ServerVersion and ServerVersion or "", "%d+.%d+")
+		if ServerVersion then
+			ServerVersion = tonumber(ServerVersion)
+			if tonumber(version) < ServerVersion then
+				AutoupdaterMsg("New version available"..ServerVersion)
+				AutoupdaterMsg("Updating, please don't press F9")
+				DownloadFile(UPDATE_URL, UPDATE_FILE_PATH, function () AutoupdaterMsg("Successfully updated. ("..version.." => "..ServerVersion.."), press F9 twice to load the updated version.") end)	 
+			else
+				AutoupdaterMsg("You have got the latest version ("..ServerVersion..")")
+			end
+		end
+	else
+		AutoupdaterMsg("Error downloading version info")
+	end
 end
 
 local RequireI = Require("SourceLib")
