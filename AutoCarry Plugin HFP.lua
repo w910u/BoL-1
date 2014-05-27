@@ -80,6 +80,34 @@ if Menu.Combo.Enabled then
 Combo()
 end
 end
+
+function Combo()
+if Menu.Combo.UseIgnite and _IGNITE then
+local Ignitetarget = STS:GetTarget(600)
+if Ignitetarget and DLib:IsKillable(Ignitetarget, MainCombo) then
+CastSpell(_IGNITE, Ignitetarget)
+end
+end
+
+UseSpells(Menu.Combo.UseQ, Menu.Combo.UseR)
+SetAttacks()
+end
+
+function UseSpells(UseQ, UseR)
+--Q
+if UseQ then
+local Qtarget = STS:GetTarget(Ranges[_Q] + Widths[_Q], n)
+if Qtarget then
+Q:Cast(Qtarget)
+end
+end
+
+--R
+if UseR then
+R:Cast(Rtarget)
+end
+end
+
 function AutoIgnite(enemy)
 	--- Simple Auto Ignite ---
 	--->
