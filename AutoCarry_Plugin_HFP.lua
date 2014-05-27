@@ -1,4 +1,4 @@
-local version = "0.15"
+local version = "0.16"
 local autoupdate = true
 local scriptname = "AutoCarry_Plugin_HFP"
 -----
@@ -53,7 +53,7 @@ STS = SimpleTS(STS_PRIORITY_LESS_CAST_MAGIC)
 DLib = DamageLib()
 DManager = DrawManager()
 
-Menu = scriptConfig("Cassiopeia", "Cassiopeia")
+Menu = scriptConfig("AutoCarry_Plugin_HFP", "HFPDarkAlex")
 
 Menu:addSubMenu("Orbwalking", "Orbwalking")
 SOWi:LoadToMenu(Menu.Orbwalking)
@@ -63,10 +63,6 @@ STS:AddToMenu(Menu.STS)
 
 Menu:addSubMenu("Combo", "Combo")
 Menu.Combo:addParam("UseQ", "Use Q in combo", SCRIPT_PARAM_ONOFF , true)
-Menu.Combo:addParam("UseW", "Use W in combo", SCRIPT_PARAM_ONOFF, true)
-Menu.Combo:addParam("UseE", "Use E on poisoned targets", SCRIPT_PARAM_ONOFF, true)
-Menu.Combo:addParam("UseEP", "Use E using packets", SCRIPT_PARAM_ONOFF, false)
-Menu.Combo:addParam("UseR", "Use R if enemy killable", SCRIPT_PARAM_ONOFF, true)
 Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
 Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
