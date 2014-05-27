@@ -147,8 +147,9 @@ function Combo()
           if TMTREADY and GetDistance(ts.target) < 275 then CastSpell(TMTSlot) end
           if RAHREADY and GetDistance(ts.target) < 275 then CastSpell(RAHSlot) end
           if RNDREADY and GetDistance(ts.target) < 275 then CastSpell(RNDSlot) end
-          if VayneParameters.engageult then
-          if RREADY then CastSpell(_R) end
+if Menu.Combo.UseR and RREADY then
+	CastSpell(_R)
+end
 if Menu.Combo.UseIgnite and _IGNITE then
 local Ignitetarget = STS:GetTarget(600)
 if Ignitetarget and DLib:IsKillable(Ignitetarget, MainCombo) then
