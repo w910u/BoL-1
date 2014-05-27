@@ -16,6 +16,9 @@ end
 
 if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait...") return end
 
+function AutoupdaterMsg(msg) print("<font color=\"#FF0000\">"..UPDATE_SCRIPT_NAME..":</font> <font color=\"#FFFFFF\">"..msg..".</font>")
+end
+
 if autoupdate then
 	 local ServerData = GetWebResult(UPDATE_HOST, UPDATE_PATH)
 	if ServerData then
