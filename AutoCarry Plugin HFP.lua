@@ -1,11 +1,11 @@
 local version = "0.03"
 local autoupdate = true
-local scriptname = "AutoCarry_Plugin_HFP"
+local scriptname = "AutoCarry Plugin HFP"
 -----
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
 local UPDATE_HOST = "raw.github.com"
-local UPDATE_PATH = "/HFPDarkAlex/BoL/master/"..scriptname..".lua".."?rand="..math.random(1,10000)
+local UPDATE_PATH = "/HFPDarkAlex/BoL/master/AutoCarry%20Plugin%20HFP.lua".."?rand="..math.random(1,10000)
 local UPDATE_FILE_PATH = SCRIPT_PATH..scriptname..".lua"
 local UPDATE_URL = "https://"..UPDATE_HOST..UPDATE_PATH
 
