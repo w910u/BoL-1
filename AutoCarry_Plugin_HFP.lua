@@ -6,7 +6,7 @@ local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
 local UPDATE_HOST = "raw.github.com"
 local UPDATE_PATH = "/HFPDarkAlex/BoL/master/"..scriptname..".lua".."?rand="..math.random(1,10000)
-local UPDATE_FILE_PATH = SCRIPT_PATH..GetCurrentEnv().FILE_NAME
+local UPDATE_FILE_PATH = SCRIPT_PATH..scriptname..".lua"
 local UPDATE_URL = "https://"..UPDATE_HOST..UPDATE_PATH
 
 if FileExist(SOURCELIB_PATH) then
