@@ -1,4 +1,4 @@
-local version = "0.05"
+local version = "0.06"
 local scriptname = "AutoCarry Plugin HFP"
 -----
 _G.AutoCarry_AutoUpdate = true
@@ -97,7 +97,6 @@ if myHero:GetSpellData(_E).level > 0 then
 	if EREADY and AgaistWall(Etarget) and Menu.Combo.UseAutoE then
 		CastSpell(_E, Etarget)
 	end
-end
 end
         BRKSlot, DFGSlot, HXGSlot, BWCSlot, TMTSlot, RAHSlot, RNDSlot, SOTDSlot, EntropySlot, YGSlot, HealthSlot, ManaSlot = GetInventorySlotItem(3153), GetInventorySlotItem(3128), GetInventorySlotItem(3146), GetInventorySlotItem(3144), GetInventorySlotItem(3077), GetInventorySlotItem(3074),  GetInventorySlotItem(3143), GetInventorySlotItem(3131), GetInventorySlotItem(3184), GetInventorySlotItem(3142), GetInventorySlotItem(2003), GetInventorySlotItem(2004)
         DFGREADY = (DFGSlot ~= nil and myHero:CanUseSpell(DFGSlot) == READY)
