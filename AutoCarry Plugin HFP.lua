@@ -9,6 +9,17 @@ local UPDATE_HOST = "raw.github.com"
 local UPDATE_PATH = "/HFPDarkAlex/BoL/master/AutoCarry%20Plugin%20HFP.lua".."?rand="..math.random(1,10000)
 local UPDATE_FILE_PATH = SCRIPT_PATH..scriptname..".lua"
 local UPDATE_URL = "https://"..UPDATE_HOST..UPDATE_PATH
+-----
+local ignite = nil
+local BRKSlot, DFGSlot, HXGSlot, BWCSlot, TMTSlot, RAHSlot, RNDSlot, SOTDSlot, EntropySlot, YGSlot, HealthSlot, ManaSlot = nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil, nil
+local QREADY, WREADY, EREADY, RREADY, BRKREADY, DFGREADY, HXGREADY, BWCREADY, TMTREADY, RAHREADY, RNDREADY, SOTDREADY, EntropyREADY, YGREADY, HEALTHREADY, MANAREADY = false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false
+local ts
+local tick = nil
+local AArange = 550 --[[        Auto attack range of Vayne      ]]--
+local Qrange = 250 --[[ Tumble distance ]]--
+local Erange = 575 --[[ The range of your condemn. Max distance is 450.  ]]--
+local tumblebufferrange = 200 --[[      When an enemy hero enters this range on rambo mode, Vayne will automatically tumble to your mouse.      ]]--
+local tumbleattacknowrange = 250 --[[   After vayne tumbles to your mouse, it will check if enemy hero is 250 distance away. If yes, attack.    ]]--
 
 if FileExist(SOURCELIB_PATH) then
 	require("SourceLib")
@@ -66,20 +77,54 @@ STS:AddToMenu(Menu.STS)
 
 Menu:addSubMenu("Combo", "Combo")
 Menu.Combo:addParam("UseQ", "Use Q in combo", SCRIPT_PARAM_ONOFF , true)
+Menu.Combo:addParam("UseAutoE", "Use E in enemy stanable", SCRIPT_PARAM_ONOFF , true)
 Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
 Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
 Menu:addSubMenu("Drawings", "Drawings")
 DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, "AA Range", true, true, true)
-PrintChat(" >> Auto Carry Plugin by HFPDarkAlex v"..version.." loaded!")
+PrintChat("<font color=\"#FF0000\"> >> Auto Carry Plugin by HFPDarkAlex v"..version.." loaded!")
 end
 
 function OnTick()
 SOWi:EnableAttacks()
-
 if Menu.Combo.Enabled then
 Combo()
 end
+if myHero:GetSpellData(_E).level > 0 then
+	StunPos = nil
+	local Etarget = STS:GetTarget(Erange, n)
+	if EREADY and AgaistWall(Etarget) and Menu.Combo.UseAutoE then
+		CastSpell(_E, Etarget)
+	end
+end
+end
+        BRKSlot, DFGSlot, HXGSlot, BWCSlot, TMTSlot, RAHSlot, RNDSlot, SOTDSlot, EntropySlot, YGSlot, HealthSlot, ManaSlot = GetInventorySlotItem(3153), GetInventorySlotItem(3128), GetInventorySlotItem(3146), GetInventorySlotItem(3144), GetInventorySlotItem(3077), GetInventorySlotItem(3074),  GetInventorySlotItem(3143), GetInventorySlotItem(3131), GetInventorySlotItem(3184), GetInventorySlotItem(3142), GetInventorySlotItem(2003), GetInventorySlotItem(2004)
+        DFGREADY = (DFGSlot ~= nil and myHero:CanUseSpell(DFGSlot) == READY)
+        HXGREADY = (HXGSlot ~= nil and myHero:CanUseSpell(HXGSlot) == READY)
+        BWCREADY = (BWCSlot ~= nil and myHero:CanUseSpell(BWCSlot) == READY)
+        BRKREADY = (BRKSlot ~= nil and myHero:CanUseSpell(BRKSlot) == READY)
+        TMTREADY = (TMTSlot ~= nil and myHero:CanUseSpell(TMTSlot) == READY)
+        RAHREADY = (RAHSlot ~= nil and myHero:CanUseSpell(RAHSlot) == READY)
+        RNDREADY = (RNDSlot ~= nil and myHero:CanUseSpell(RNDSlot) == READY)
+        EntropyREADY = (EntropySlot ~= nil and myHero:CanUseSpell(EntropySlot) == READY)
+        YGREADY = (YGSlot ~= nil and myHero:CanUseSpell(YGSlot) == READY)
+        HEALTHREADY = (HEALTHSlot ~= nil and myHero:CanUseSpell(HEALTHSlot) == READY)
+        MANAREADY = (MANASlot ~= nil and myHero:CanUseSpell(MANASlot) == READY)
+        SOTDREADY = (SOTDSlot ~= nil and myHero:CanUseSpell(SOTDSlot) == READY)
+        IREADY = (ignite ~= nil and myHero:CanUseSpell(ignite) == READY)
+        QREADY = (myHero:CanUseSpell(_Q) == READY)
+        EREADY = (myHero:CanUseSpell(_E) == READY)
+        RREADY = (myHero:CanUseSpell(_R) == READY)
+end
+
+function AgainstWall(Target)
+        TargetPos = Vector(Target.x, Target.y, Target.z)
+        MyPos = Vector(myHero.x, myHero.y, myHero.z)
+        StunPos = TargetPos+(TargetPos-MyPos)*((VayneParameters.stunDistance/GetDistance(Target)))
+  if StunPos ~= nil and mapPosition:intersectsWall(Point(StunPos.x, StunPos.z)) then
+                return true
+        end
 end
 
 function Combo()
@@ -97,9 +142,9 @@ end
 function UseSpells(UseQ, UseR)
 --Q
 if UseQ then
-local Qtarget = STS:GetTarget(Ranges[AA] + Widths[AA], n)
+local Qtarget = STS:GetTarget(AArange, n)
 if Qtarget then
-Q:Cast(Qtarget)
+CastSpell(_Q, mousePos.x, mousePos.z)
 end
 end
 
