@@ -1,4 +1,4 @@
-local version = "0.06"
+local version = "0.07"
 local scriptname = "AutoCarry Plugin HFP"
 -----
 _G.AutoCarry_AutoUpdate = true
@@ -84,6 +84,13 @@ Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 Menu:addSubMenu("Drawings", "Drawings")
 DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, "AA Range", true, true, true)
 PrintChat("<font color=\"#FF0000\"> >> Auto Carry Plugin by HFPDarkAlex v"..version.." loaded!")
+end
+
+function SetAttacks()
+SOWi:DisableAttacks()
+if not Q:IsReady() and not W:IsReady() and not E:IsReady() then
+SOWi:EnableAttacks()
+end
 end
 
 function OnTick()
