@@ -50,19 +50,6 @@ STS = SimpleTS(STS_PRIORITY_LESS_CAST_MAGIC)
 DLib = DamageLib()
 DManager = DrawManager()
 
-Q = Spell(_Q, Ranges[_Q])
-W = Spell(_W, Ranges[_W])
-E = Spell(_E, Ranges[_E])
-R = Spell(_R, Ranges[_R])
-
-Q:SetSkillshot(VP, SKILLSHOT_LINEAR, Widths[_Q], Delays[_Q], Speeds[_Q], false)
-W:SetSkillshot(VP, SKILLSHOT_CIRCULAR, Widths[_W], Delays[_W], Speeds[_R], false)
-R:SetSkillshot(VP, SKILLSHOT_CONE, Widths[_R], Delays[_R], Speeds[_R], false)
-
-Q:SetAOE(true)
-W:SetAOE(true)
-R:SetAOE(true, R.width, 0)
-
 DLib:RegisterDamageSource(_Q, _MAGIC, 35, 40, _MAGIC, _AP, 0.8)
 DLib:RegisterDamageSource(_W, _MAGIC, 15, 10, _MAGIC, _AP, 0.15, function() return (player:CanUseSpell(_W) == READY) end)
 DLib:RegisterDamageSource(_E, _MAGIC, 35, 35, _MAGIC, _AP, 0.55)
@@ -122,4 +109,14 @@ EnemyMinions = minionManager(MINION_ENEMY, Ranges[_W], myHero, MINION_SORT_MAXHE
 JungleMinions = minionManager(MINION_JUNGLE, Ranges[_W], myHero, MINION_SORT_MAXHEALTH_DEC)
 
 TickLimiter(AutoR, 15)
+end
+
+function OnTick()
+SOWi:EnableAttacks()
+
+if Menu.Combo.Enabled then
+Combo()
+elseif Menu.Harass.Enabled or Menu.Harass.Enabled2 then
+Harass()
+end
 end
