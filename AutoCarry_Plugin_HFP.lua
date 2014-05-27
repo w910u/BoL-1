@@ -16,7 +16,7 @@ end
 
 if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait...") return end
 
-function AutoupdaterMsg(msg) print("<font color=\"#FF0000\">"..UPDATE_SCRIPT_NAME..":</font> <font color=\"#FFFFFF\">"..msg..".</font>")
+function AutoupdaterMsg(msg) print("<font color=\"#FF0000\">"..scriptname..":</font> <font color=\"#FFFFFF\">"..msg..".</font>")
 end
 
 if autoupdate then
