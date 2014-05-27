@@ -1,4 +1,4 @@
-local version = "0.02"
+local version = "0.03"
 local autoupdate = true
 local scriptname = "AutoCarry_Plugin_HFP"
 -----
