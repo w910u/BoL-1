@@ -70,8 +70,6 @@ Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
 Menu:addSubMenu("Drawings", "Drawings")
 DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, "AA Range", true, true, true)
-
-TickLimiter(AutoR, 15)
 end
 
 function OnTick()
