@@ -1,11 +1,11 @@
-local version = 0.15
+local version = "0.15"
 local autoupdate = true
 local scriptname = "AutoCarry_Plugin_HFP"
 -----
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
 local UPDATE_HOST = "raw.github.com"
-local UPDATE_PATH = "/HFPDarkAlex/BoL/master/"..scriptname..".lua".."?rand="..math.random(1,10000)
+local UPDATE_PATH = "/HFPDarkAlex/BoL/master/"..scriptname..".lua"
 
 if FileExist(SOURCELIB_PATH) then
 	require("SourceLib")
@@ -50,11 +50,6 @@ STS = SimpleTS(STS_PRIORITY_LESS_CAST_MAGIC)
 DLib = DamageLib()
 DManager = DrawManager()
 
-DLib:RegisterDamageSource(_Q, _MAGIC, 35, 40, _MAGIC, _AP, 0.8)
-DLib:RegisterDamageSource(_W, _MAGIC, 15, 10, _MAGIC, _AP, 0.15, function() return (player:CanUseSpell(_W) == READY) end)
-DLib:RegisterDamageSource(_E, _MAGIC, 35, 35, _MAGIC, _AP, 0.55)
-DLib:RegisterDamageSource(_R, _MAGIC, 75, 125, _MAGIC, _AP, 0.6, function() return (player:CanUseSpell(_R) == READY) end)
-
 Menu = scriptConfig("Cassiopeia", "Cassiopeia")
 
 Menu:addSubMenu("Orbwalking", "Orbwalking")
@@ -72,41 +67,8 @@ Menu.Combo:addParam("UseR", "Use R if enemy killable", SCRIPT_PARAM_ONOFF, true)
 Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
 Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
-Menu:addSubMenu("Harass", "Harass")
-Menu.Harass:addParam("UseQ", "Harass using Q", SCRIPT_PARAM_ONOFF, true)
-Menu.Harass:addParam("UseW", "Harass using W", SCRIPT_PARAM_ONOFF, false)
-Menu.Harass:addParam("UseE", "Harass using E on poisoned", SCRIPT_PARAM_ONOFF, true)
-Menu.Harass:addParam("Enabled", "Harass! (hold)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("C"))
-Menu.Harass:addParam("Enabled2", "Harass! (toggle)", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("Y"))
-
-Menu:addSubMenu("Farm", "Farm")
-Menu.Farm:addParam("UseQ", "Use Q", SCRIPT_PARAM_LIST, 4, { "No", "Freeze", "LaneClear", "Both" })
-Menu.Farm:addParam("UseW", "Use W", SCRIPT_PARAM_LIST, 3, { "No", "Freeze", "LaneClear", "Both" })
-Menu.Farm:addParam("UseE", "Use E", SCRIPT_PARAM_LIST, 3, { "No", "Freeze", "LaneClear", "Both" })
-Menu.Farm:addParam("Freeze", "Farm freezing", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("C"))
-Menu.Farm:addParam("LaneClear", "Farm LaneClear", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("V"))
-
-Menu:addSubMenu("JungleFarm", "JungleFarm")
-Menu.JungleFarm:addParam("UseQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
-Menu.JungleFarm:addParam("UseW", "Use W", SCRIPT_PARAM_ONOFF, false)
-Menu.JungleFarm:addParam("UseE", "Use E", SCRIPT_PARAM_ONOFF, false)
-Menu.JungleFarm:addParam("Enabled", "Farm jungle!", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("V"))
-
-Menu:addSubMenu("Ultimate", "Ultimate")
-Menu.Ultimate:addParam("Auto", "Auto ultimate if ", SCRIPT_PARAM_LIST, 1, { "No", ">0 targets", ">1 targets", ">2 targets", ">3 targets", ">4 targets" })
-Menu.Ultimate:addParam("AutoAim", "Cast ultimate!", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("R"))
-
 Menu:addSubMenu("Drawings", "Drawings")
---Spell ranges
-for spell, range in pairs(Ranges) do
-DManager:CreateCircle(myHero, range, 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, SpellToString(spell).." Range", true, true, true)
-end
 DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, "AA Range", true, true, true)
---Predicted damage on healthbars
-DLib:AddToMenu(Menu.Drawings, MainCombo)
-
-EnemyMinions = minionManager(MINION_ENEMY, Ranges[_W], myHero, MINION_SORT_MAXHEALTH_DEC)
-JungleMinions = minionManager(MINION_JUNGLE, Ranges[_W], myHero, MINION_SORT_MAXHEALTH_DEC)
 
 TickLimiter(AutoR, 15)
 end
@@ -116,7 +78,5 @@ SOWi:EnableAttacks()
 
 if Menu.Combo.Enabled then
 Combo()
-elseif Menu.Harass.Enabled or Menu.Harass.Enabled2 then
-Harass()
 end
 end
