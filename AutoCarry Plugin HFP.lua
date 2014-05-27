@@ -5,7 +5,7 @@ local scriptname = "AutoCarry Plugin HFP"
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
 local UPDATE_HOST = "raw.github.com"
-local UPDATE_PATH = "/HFPDarkAlex/BoL/master/AutoCarry%20Plugin%20HFP.lua"
+local UPDATE_PATH = "/HFPDarkAlex/BoL/master/AutoCarry%20Plugin%20HFP.lua".."?rand="..math.random(1,10000)
 local UPDATE_FILE_PATH = SCRIPT_PATH..scriptname..".lua"
 local UPDATE_URL = "https://"..UPDATE_HOST..UPDATE_PATH
 
@@ -29,7 +29,7 @@ if autoupdate then
 		if ServerVersion then
 			ServerVersion = tonumber(ServerVersion)
 			if tonumber(version) < ServerVersion then
-				AutoupdaterMsg("New version available"..ServerVersion)
+				AutoupdaterMsg("New version available: v"..ServerVersion)
 				AutoupdaterMsg("Updating, please don't press F9")
 				DownloadFile(UPDATE_URL, UPDATE_FILE_PATH, function () AutoupdaterMsg("Successfully updated. ("..version.." => "..ServerVersion.."), press F9 twice to load the updated version.") end)	 
 			else
