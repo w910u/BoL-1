@@ -97,7 +97,7 @@ end
 function UseSpells(UseQ, UseR)
 --Q
 if UseQ then
-local Qtarget = STS:GetTarget(Ranges[_Q] + Widths[_Q], n)
+local Qtarget = STS:GetTarget(Ranges[AA] + Widths[AA], n)
 if Qtarget then
 Q:Cast(Qtarget)
 end
