@@ -1,5 +1,5 @@
-local version = 0.1
-local autoupdate = false
+local version = 0.15
+local autoupdate = true
 local scriptname = "AutoCarry_Plugin_HFP"
 -----
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
@@ -16,7 +16,7 @@ end
 
 if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait...") return end
 
-if AUTOUPDATE then
+if autoupdate then
 	 local ServerData = GetWebResult(UPDATE_HOST, UPDATE_PATH)
 	if ServerData then
 		local ServerVersion = string.match(ServerData, "local version = \"%d+.%d+\"")
