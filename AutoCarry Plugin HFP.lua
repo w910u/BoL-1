@@ -77,6 +77,7 @@ STS:AddToMenu(Menu.STS)
 
 Menu:addSubMenu("Combo", "Combo")
 Menu.Combo:addParam("UseQ", "Use Q in combo", SCRIPT_PARAM_ONOFF , true)
+Menu.Combo:addParam("UseR", "Use R in combo", SCRIPT_PARAM_ONOFF , true)
 Menu.Combo:addParam("UseAutoE", "Use E in enemy stanable", SCRIPT_PARAM_ONOFF , true)
 Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
 Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
@@ -88,7 +89,7 @@ end
 
 function SetAttacks()
 SOWi:DisableAttacks()
-if not Q:IsReady() and not W:IsReady() and not E:IsReady() then
+if not QREADY and not EREADY then
 SOWi:EnableAttacks()
 end
 end
@@ -134,6 +135,20 @@ function AgainstWall(Target)
 end
 
 function Combo()
+	if DFGREADY then CastSpell(DFGSlot, ts.target) end
+          if HXGREADY then CastSpell(HXGSlot, ts.target) end
+          if BWCREADY then CastSpell(BWCSlot, ts.target) end
+          if BRKREADY and player.health/player.maxHealth <= VayneParameters.BRKUSE then CastSpell(BRKSlot, ts.target) end
+          if SOTDREADY then CastSpell(SOTDSlot) end
+          if EntropyREADY then CastSpell(EntropySlot) end
+          if YGREADY then CastSpell(YGSlot) end
+          if HEALTHREADY then CastSpell(HEALTHSlot) end
+          if MANAREADY then CastSpell(MANASlot) end
+          if TMTREADY and GetDistance(ts.target) < 275 then CastSpell(TMTSlot) end
+          if RAHREADY and GetDistance(ts.target) < 275 then CastSpell(RAHSlot) end
+          if RNDREADY and GetDistance(ts.target) < 275 then CastSpell(RNDSlot) end
+          if VayneParameters.engageult then
+          if RREADY then CastSpell(_R) end
 if Menu.Combo.UseIgnite and _IGNITE then
 local Ignitetarget = STS:GetTarget(600)
 if Ignitetarget and DLib:IsKillable(Ignitetarget, MainCombo) then
@@ -149,26 +164,12 @@ function UseSpells(UseQ, UseR)
 --Q
 if UseQ then
 local Qtarget = STS:GetTarget(AArange, n)
-if Qtarget then
+if Qtarget and QREADY then
 CastSpell(_Q, mousePos.x, mousePos.z)
 end
 end
-
---R
-if UseR then
-R:Cast(Rtarget)
-end
 end
 
-function AutoIgnite(enemy)
-	--- Simple Auto Ignite ---
-	--->
-		if enemy.health <= iDmg and GetDistanceSqr(enemy) <= 600*600 then
-			if iReady then CastSpell(ignite, enemy) end
-		end
-	---<
-	--- Simple Auto Ignite ---
-end
 function UseItems(enemy)
 	--- Use Items (Will Improve Soon) ---
 	--->
