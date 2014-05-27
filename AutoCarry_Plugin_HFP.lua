@@ -80,3 +80,40 @@ if Menu.Combo.Enabled then
 Combo()
 end
 end
+function AutoIgnite(enemy)
+	--- Simple Auto Ignite ---
+	--->
+		if enemy.health <= iDmg and GetDistanceSqr(enemy) <= 600*600 then
+			if iReady then CastSpell(ignite, enemy) end
+		end
+	---<
+	--- Simple Auto Ignite ---
+end
+function UseItems(enemy)
+	--- Use Items (Will Improve Soon) ---
+	--->
+		if not enemy then
+			enemy = Target
+		end
+		if ValidTarget(enemy) and enemy ~= nil then
+			if dfgReady and GetDistanceSqr(enemy) <= 600*600 then CastSpell(dfgSlot, enemy) end
+			if bftReady and GetDistanceSqr(enemy) <= 600*600 then CastSpell(bftSlot, enemy) end
+			if hxgReady and GetDistanceSqr(enemy) <= 600*600 then CastSpell(hxgSlot, enemy) end
+			if bwcReady and GetDistanceSqr(enemy) <= 450*450 then CastSpell(bwcSlot, enemy) end
+			if brkReady and GetDistanceSqr(enemy) <= 450*450 then CastSpell(brkSlot, enemy) end
+		end
+	---<
+	--- Use Items ---
+end
+function CastR()
+	--- Dynamic R Cast ---
+	--->
+		if not SkillR.ready then
+			return false
+		else
+			CastSpell(_R)
+			SkillR.castingUlt = true
+		end
+	---<
+	--- Dymanic R Cast --
+end
