@@ -1,6 +1,7 @@
 local version = "0.04"
-local autoupdate = true
 local scriptname = "AutoCarry Plugin HFP"
+-----
+_G.AutoCarry_AutoUpdate = false
 -----
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -21,7 +22,7 @@ if DOWNLOADING_SOURCELIB then print("Downloading required libraries, please wait
 function AutoupdaterMsg(msg) print("<font color=\"#FF0000\">"..scriptname..":</font> <font color=\"#FFFFFF\">"..msg..".</font>")
 end
 
-if autoupdate then
+if _G.AutoCarry_AutoUpdate then
 	 local ServerData = GetWebResult(UPDATE_HOST, UPDATE_PATH)
 	if ServerData then
 		local ServerVersion = string.match(ServerData, "local version = \"%d+.%d+\"")
