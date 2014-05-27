@@ -1,7 +1,7 @@
 local version = "0.04"
 local scriptname = "AutoCarry Plugin HFP"
 -----
-_G.AutoCarry_AutoUpdate = false
+_G.AutoCarry_AutoUpdate = true
 -----
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
