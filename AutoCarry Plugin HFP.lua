@@ -101,7 +101,7 @@ Combo()
 end
 if myHero:GetSpellData(_E).level > 0 then
 	StunPos = nil
-	local Etarget = STS:GetTarget(Erange, n)
+	local Etarget = STS:GetTarget(1000, n)
 	if EREADY and AgaistWall(Etarget) and Menu.Combo.UseAutoE then
 		CastSpell(_E, Etarget)
 	end
