@@ -1,5 +1,5 @@
 --- Info
-local version = 0.10
+local version = 0.11
 local AUTOUPDATE = true
 local SCRIPT_NAME = "AutoCarryHFP"
 --- Update
