@@ -20,8 +20,8 @@ SourceUpdater(SCRIPT_NAME, version, "raw.github.com", "/HFPDarkAlex/BoL/master/"
 end
 
 local RequireI = Require("SourceLib")
-RequireI:Add("vPrediction", "https://raw.githubusercontent.com/HFPDarkAlex/Scripts/master/Common/VPrediction.lua")
-RequireI:Add("SOW", "https://raw.githubusercontent.com/HFPDarkAlex/Scripts/master/Common/SOW.lua")
+RequireI:Add("vPrediction", "https://raw.githubusercontent.com/AWABoL150/BoL/master/Honda7-Scripts/common/VPrediction.lua")
+RequireI:Add("SOW", "https://raw.githubusercontent.com/AWABoL150/BoL/master/Honda7-Scripts/common/SOW.lua")
 RequireI:Check()
 
 if RequireI.downloadNeeded == true then return end
