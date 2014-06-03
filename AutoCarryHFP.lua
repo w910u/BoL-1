@@ -62,7 +62,7 @@ Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
 Menu:addSubMenu("Drawings", "Drawings")
 DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, "AA Range", true, true, true)
-PrintChat("<font color=\"#6699ff\"><b>" .. SCRIPT_NAME .. ":</b></font> <font color=\"#FFFFFF\">Successfully loaded. Version: " .. version .. "</font>")
+PrintChat("<font color=\"#6699ff\"><b>" .. SCRIPT_NAME .. "v" .. version .. ":</b></font> <font color=\"#FFFFFF\">Successfully loaded.</font>")
 end
 
 function SetAttacks()
