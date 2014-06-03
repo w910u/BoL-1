@@ -1,5 +1,5 @@
 --- Info
-local version = 0.09
+local version = 0.10
 local AUTOUPDATE = true
 local SCRIPT_NAME = "AutoCarryHFP"
 --- Update
@@ -62,7 +62,7 @@ Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 
 Menu:addSubMenu("Drawings", "Drawings")
 DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu.Drawings, "AA Range", true, true, true)
-PrintChat("<font color=\"#FF0000\"> >> Auto Carry Plugin by HFPDarkAlex v"..version.." loaded!")
+PrintChat("<font color=\"#6699ff\"><b>" .. SCRIPT_NAME .. ":</b></font> <font color=\"#FFFFFF\">Successfully loaded. Version: " .. version .. "</font>")
 end
 
 function SetAttacks()
