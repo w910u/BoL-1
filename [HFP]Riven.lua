@@ -26,7 +26,7 @@ RequireI:Check()
 
 if RequireI.downloadNeeded == true then return end
 
-Ranges = {[_Q] = 112.5, [_W] = 125, [_E] = 88888, [_R] = 900} -- Updating in OnBuff
+Ranges = {[_Q] = 112.5, [_W] = 125, [_E] = 325, [_R] = 900} -- Updating in OnBuff
 Delays = {[_Q] = 0.5, [_W] = 0.25, [_R] = 0.25}
 Speeds = {[_Q] = math.huge, [_E] = 1500, [_R] = 2200} -- E updates in OnDash
 Angles = {[_R] = 45*math.pi/180}
@@ -68,6 +68,10 @@ function OnTick()
 	if Menu.enabled and ValidTarget(target) and target.type == myHero.type then
 		Combo()
 	end
+end
+
+function Combo()
+
 end
 
 -- function OnProcessSpell(object, spell)
