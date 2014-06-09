@@ -1,5 +1,5 @@
 --- [[Info]] ---
-local version = 0.01
+local version = 0.02
 local AUTOUPDATE = true
 local SCRIPT_NAME = "[HFP]Cassio"
 --- [[Update + Libs]] ---
@@ -69,6 +69,7 @@ function OnLoad()
 		Menu.Combo:addParam("UseR", "Use R if enemy killable", SCRIPT_PARAM_ONKEYTOGGLE, true,   string.byte("Z"))
 		Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
 		Menu.Combo:addParam("Enabled", "Combo!", SCRIPT_PARAM_ONKEYDOWN, false, 32)
+		Menu.Combo:permaShow("UseR")
 
 	Menu:addSubMenu("Harass", "Harass")
 		Menu.Harass:addParam("UseQ", "Harass using Q", SCRIPT_PARAM_ONOFF, true)
