@@ -24,7 +24,7 @@ Explanation of the marks:
 ]]
 -- [[ AutoUpdater + Version Info + Libs ]] --
 --- Info
-local version = 0.01
+local version = 0.02
 local AUTOUPDATE = true
 local SCRIPT_NAME = "[HFP]Fiora"
 --- Libs(Source)
@@ -108,7 +108,7 @@ function OnLoad()
 	LastBasicAttack = os.clock()
 	LastQ = 0
 	
-	enemyMinions = minionManager(MINION_ENEMY, 600, player, MINION_SORT_HEALTH_ASC)
+	enemyMinions = minionManager(MINION_ENEMY, 1500, player, MINION_SORT_HEALTH_ASC)
 
 	if myHero:GetSpellData(SUMMONER_1).name:find("SummonerDot") then ignite = SUMMONER_1
 		elseif myHero:GetSpellData(SUMMONER_2).name:find("SummonerDot") then ignite = SUMMONER_2
