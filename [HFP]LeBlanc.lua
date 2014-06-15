@@ -1,31 +1,7 @@
---[[
-	LeBlanc Combo 1.3
-		by eXtragoZ
-
-	Features:
-		- Full combo: Items -> Q -> R (Mimic Q) -> W -> E
-		- Supports: Deathfire Grasp, Liandry's Torment, Blackfire Torch, Bilgewater Cutlass, Hextech Gunblade, Blade of the Ruined King, Sheen, Trinity, Lich Bane, Iceborn Gauntlet, Shard of True Ice, Randuin's Omen and Ignite
-		- Harass mode: Q
-		- Informs where will use E / default off
-		- Checks minion collision for E
-		- The first circle is the range of Q, the second circle is the range of Q+W
-		- Mark killable target with a combo
-		- Target configuration
-		- Press shift to configure
-
-	Explanation of the marks:
-		Green circle: Marks the current target to which you will do the combo
-		Blue circle: Mark a target that can be killed with a combo, if all the skills were available
-		Red circle: Mark a target that can be killed using items + 2 hits + Q x2 + Q mark x2 + W + E + E Root + R (Mimic Q) + ignite
-		2 Red circles: Mark a target that can be killed using items + 1 hit + Q + Q mark + W + E + E Root + R (Mimic Q) + ignite
-		3 Red circles: Mark a target that can be killed using items (without on hit items) + Q + Q mark + E + R (Mimic Q)
-]]
---leBlanc_shackle_mis.troy
---1480
---250
+--[ [HFP]DarkAlex LeBlanc Combo ]--
 if myHero.charName ~= "Leblanc" then return end
 --- [[Info]] ---
-local version = 0.02
+local version = 0.03
 local AUTOUPDATE = true
 local SCRIPT_NAME = "[HFP]Cassio"
 --- [[Update + Libs]] ---

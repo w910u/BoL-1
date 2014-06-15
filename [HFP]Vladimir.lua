@@ -1,6 +1,6 @@
 if myHero.charName ~= "Vladimir" then return end
 --- [[Info]] ---
-local version = 0.01
+local version = 0.02
 local AUTOUPDATE = true
 local SCRIPT_NAME = "[HFP]Vladimir"
 --- [[Update + Libs]] ---
