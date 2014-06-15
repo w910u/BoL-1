@@ -43,8 +43,8 @@ function OnLoad()
 
 	R:SetSkillshot(VP, SKILLSHOT_CIRCULAR, Widths[_R], Delays[_R], Speeds[_R], false)
 
-	Q:SetAOE(false)
 	W:SetAOE(true, Widths[_W], 0)
+	E:SetAOE(true, Widths[_E], 0)
 	R:SetAOE(true, Widths[_R], 0)
 
 	DLib:RegisterDamageSource(_Q, _MAGIC, 55, 35, _MAGIC, _AP, 0.6)
@@ -52,7 +52,7 @@ function OnLoad()
 	DLib:RegisterDamageSource(_E, _MAGIC, 70, 50, _MAGIC, _AP, 0.45)
 	DLib:RegisterDamageSource(_R, _MAGIC, 50, 100, _MAGIC, _AP, 0.7, function() return (player:CanUseSpell(_R) == READY) end)
 
-	Menu = scriptConfig("Vladimir", "Cassiopeia")
+	Menu = scriptConfig("Vladimir", "Vladimir")
 
 	Menu:addSubMenu("Orbwalking", "Orbwalking")
 		SOWi:LoadToMenu(Menu.Orbwalking)
@@ -82,6 +82,7 @@ function OnLoad()
 		Menu.Farm:addParam("UseQ",  "Use Q", SCRIPT_PARAM_LIST, 4, { "No", "Freeze", "LaneClear", "Both" })
 		Menu.Farm:addParam("UseW",  "Use W", SCRIPT_PARAM_LIST, 3, { "No", "Freeze", "LaneClear", "Both" })
 		Menu.Farm:addParam("UseE",  "Use E", SCRIPT_PARAM_LIST, 3, { "No", "Freeze", "LaneClear", "Both" })
+		Menu.Farm:addParam("MinE",  "Minimal Minions For E" , SCRIPT_PARAM_SLICE, 6, 1, 10, 1)
 		Menu.Farm:addParam("Freeze", "Farm freezing", SCRIPT_PARAM_ONKEYDOWN, false,   string.byte("C"))
 		Menu.Farm:addParam("LaneClear", "Farm LaneClear", SCRIPT_PARAM_ONKEYDOWN, false,   string.byte("V"))
 
@@ -106,25 +107,14 @@ function OnLoad()
 
 	EnemyMinions = minionManager(MINION_ENEMY, Ranges[_R], myHero, MINION_SORT_MAXHEALTH_DEC)
 	JungleMinions = minionManager(MINION_JUNGLE, Ranges[_R], myHero, MINION_SORT_MAXHEALTH_DEC)
-
-	TickLimiter(AutoR, 15)
+	
 	print("<font color='#ff8000'> >> Vladimir Script loaded! </font>")
-end
-
-function AutoE()
-	if not E:IsReady() then return end
-	for n = 1, 5 do
-		local target = STS:GetTarget(Ranges[_E], n)
-		if target then
-			return E:Cast(target)
-		end
-	end
 end
 
 function UseSpells(UseQ, UseW, UseE, UseR)
 	--Q
 	if UseQ then
-		local Qtarget = STS:GetTarget(Ranges[_Q] + Widths[_Q], n)
+		local Qtarget = STS:GetTarget(Ranges[_Q], n)
 		if Qtarget then
 			Q:Cast(Qtarget)
 		end
@@ -142,15 +132,18 @@ function UseSpells(UseQ, UseW, UseE, UseR)
 
 	--E
 	if UseE then
-		E.packetCast = Menu.Combo.UseEP
-		AutoE()
+		if not E:IsReady() then return end
+		local target = STS:GetTarget(Ranges[_E], n)
+		if target then
+			return E:Cast(target)
+		end
 	end
 
 	--R
 	if UseR then
 		local Rtarget = STS:GetTarget(Ranges[_R])
 		if Rtarget and DLib:IsKillable(Rtarget, MainCombo) then
-			R:SetAOE(true, Widths[_R], CountObjectsNearPos(Vector(Rtarget), 500, 500, SelectUnits(GetEnemyHeroes(), function(t) return ValidTarget(t) end)))
+			R:SetAOE(true, Widths[_R], CountObjectsNearPos(Rtarget, Ranges[_R], Widths[_R], SelectUnits(GetEnemyHeroes(), function(t) return ValidTarget(t) end)))
 			R:Cast(Rtarget)
 			R:SetAOE(true)
 		end
@@ -180,6 +173,20 @@ function Harass()
 	VP.ShotAtMaxRange = true
 	UseSpells(Menu.Harass.UseQ, false, Menu.Harass.UseE, false)
 	VP.ShotAtMaxRange = false
+end
+
+function GetEMinions()
+	local Minions = 0
+	for i, minion in pairs(EnemyMinions.objects) do
+		if minion ~= nil and 
+			minion.valid and 
+			minion.team ~= myHero.team and not 
+			minion.dead and  
+			minion.health < (DLib:CalcSpellDamage(minion, _E)) then
+				Minions = Minions + 1
+		end
+	end
+	return Minions
 end
 
 function Farm()
@@ -212,25 +219,22 @@ function Farm()
 		-- end
 	end
 
-	if UseW then
-		local CasterMinions = SelectUnits(EnemyMinions.objects, function(t) return (t.charName:lower():find("wizard") or t.charName:lower():find("caster")) and ValidTarget(t) end)
-		CasterMinions = GetPredictedPositionsTable(VP, CasterMinions, Delays[_W], Widths[_W], Ranges[_W], Speeds[_W], myHero, false)
+	-- if UseW then
+		-- local CasterMinions = SelectUnits(EnemyMinions.objects, function(t) return (t.charName:lower():find("wizard") or t.charName:lower():find("caster")) and ValidTarget(t) end)
+		-- CasterMinions = GetPredictedPositionsTable(VP, CasterMinions, Delays[_W], Widths[_W], Ranges[_W], Speeds[_W], myHero, false)
 
-		local BestPos, BestHit = GetBestCircularFarmPosition(Ranges[_W], Widths[_W]*1.5, CasterMinions)
-		if BestHit > 2 then
-			CastSpell(_W, BestPos.x, BestPos.z)
-			do return end
-		end
-	end
+		-- local BestPos, BestHit = GetBestCircularFarmPosition(Ranges[_W], Widths[_W]*1.5, CasterMinions)
+		-- if BestHit > 2 then
+			-- CastSpell(_W, BestPos.x, BestPos.z)
+			-- do return end
+		-- end
+	-- end
 
 	if UseE then
-		local PoisonedMinions = SelectUnits(EnemyMinions.objects, function(t) return ValidTarget(t) end)
-		for i, minion in ipairs(PoisonedMinions) do
-			local time = 0.25 + 1900 / GetDistance(minion.visionPos, myHero.visionPos) + 0.1
-			if VP:GetPredictedHealth(minion, time) - DLib:CalcSpellDamage(minion, _E) < 0 then
+		-- local Minions = CountObjectsNearPos(myHero, Ranges[_E], Widths[_R], SelectUnits(EnemyMinions.objects, function(t) return ValidTarget(t) end))
+		local Minions = GetEMinions()
+		if Minions >= Menu.Farm.MinE then
 				CastSpell(_E, minion)
-				break
-			end
 		end
 	end
 end
