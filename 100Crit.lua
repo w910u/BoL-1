@@ -27,14 +27,16 @@ if RequireI.downloadNeeded == true then return end
 function OnLoad()
 	VP = VPrediction()
 	SOWi = SOW(VP)
-	STS = SimpleTS(STS_PRIORITY_LESS_CAST_MAGIC)
+	STS = SimpleTS(STS_PRIORITY_LESS_CAST_PHYSICAL)
 	DLib = DamageLib()
 	DManager = DrawManager()
 	
 	Menu = scriptConfig("OnlyCritical", "OnlyCritical")
 	Menu:addParam("enable", "Enable script?", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("I"))
+	Mdnu:addParam("TargSelect", "Select Good Target (Bind Orbwalker Carry Me Hotkey)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("X"))
+	Menu:permaShow("enable")
 	Menu:addParam("critChance", "Minimum Crititcal Chance", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
-	Menu:addParam("MinObj", "Minimum Targets For Script Active", SCRIPT_PARAM_SLICE, 1, 1, 5, 1)
+	-- Menu:addParam("MinObj", "Minimum Targets For Script Active", SCRIPT_PARAM_SLICE, 1, 1, 5, 1)
 	DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu, "AA Range", true, true, true)
 	
 	Menu:addSubMenu("Orbwalking", "Orbwalking")
@@ -68,6 +70,16 @@ function OnTick()
 	if player.dead or GetGame().isOver then return end
 	EnemyMinions:update()
 	JungleMinions:update()
+	if Menu.TargSelect then
+		Combo()
+	end
+end
+
+function Combo()
+	local AATarget = STS:GetTarget(player.range)
+	if AATarget then
+		player:Attack(target)
+	end
 end
 
 function OnProcessSpell(unit, spell)
