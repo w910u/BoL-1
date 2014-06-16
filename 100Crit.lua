@@ -1,9 +1,9 @@
 -- Credits:
--- TheMaynard  - For the idea
--- Jiro - For topic on forum)
+-- TheMaynard  - For the script... Sorry For didn't see his topic and made script by Jire Idea
+-- Jire - For topic on forum)
 
 --- [[Info]] ---
-local version = 0.15
+local version = 0.16
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -35,6 +35,7 @@ function OnLoad()
 	Menu = scriptConfig("OnlyCritical", "OnlyCritical")
 	Menu:addParam("enable", "Enable script?", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("I"))
 	Menu:addParam("TargSelect", "Select Good Target (Bind Orbwalker Carry Me Hotkey)", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("K"))
+	Munu:addParam("OnlyJungle", "Only Jungle Creeps", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("J"))
 	Menu:permaShow("enable")
 	Menu:addParam("critChance", "Minimum Crititcal Chance", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 	-- Menu:addParam("MinObj", "Minimum Targets For Script Active", SCRIPT_PARAM_SLICE, 1, 1, 5, 1)
@@ -88,7 +89,10 @@ function OnProcessSpell(unit, spell)
 		return
 	end
 	
-	_Objects = CountObjects(GetEnemyHeroes()) + CountObjects(EnemyMinions.objects) + CountObjects(JungleMinions.objects) 	
+	_Objects = CountObjects(GetEnemyHeroes()) + CountObjects(EnemyMinions.objects) + CountObjects(JungleMinions.objects) 
+	if Menu.OnlyJungle then
+		_Objects = CountObjects(JungleMinions.objects)
+	end
 	if _Objects <= 1 then
 		return
 	end
