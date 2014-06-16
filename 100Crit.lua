@@ -2,7 +2,7 @@
 -- Jire - For basic script and idea
 
 --- [[Info]] ---
-local version = 0.12
+local version = 0.11
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -33,7 +33,7 @@ function OnLoad()
 	
 	Menu = scriptConfig("OnlyCritical", "OnlyCritical")
 	Menu:addParam("enable", "Enable script?", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("I"))
-	Menu:addParam("TargSelect", "Select Good Target (Bind Orbwalker Carry Me Hotkey)", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("K"))
+	Menu:addParam("TargSelect", "Select Good Target (Bind Orbwalker Carry Me Hotkey)", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("X"))
 	Menu:permaShow("enable")
 	Menu:addParam("critChance", "Minimum Crititcal Chance", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 	-- Menu:addParam("MinObj", "Minimum Targets For Script Active", SCRIPT_PARAM_SLICE, 1, 1, 5, 1)
@@ -70,17 +70,17 @@ function OnTick()
 	if player.dead or GetGame().isOver then return end
 	EnemyMinions:update()
 	JungleMinions:update()
-	-- if Menu.TargSelect then
-		-- Combo()
-	-- end
+	if Menu.TargSelect then
+		Combo()
+	end
 end
 
--- function Combo()
-	-- local AATarget = STS:GetTarget(player.range)
-	-- if AATarget then
-		-- player:Attack(target)
-	-- end
--- end
+function Combo()
+	local AATarget = STS:GetTarget(player.range)
+	if AATarget then
+		player:Attack(target)
+	end
+end
 
 function OnProcessSpell(unit, spell)
 	if not Menu.enable or player.critChance < (Menu.critChance / 100) or spell.target == nil or spell.target.name:find("Turret_") ~= nil or deac == 1 then
@@ -114,13 +114,6 @@ function findTargetOtherThan(target)
 		temp = objManager:GetObject(k)
 		if temp and temp.name:find("Minion_") ~= nil and temp ~= target and ValidTarget(temp, player.range + 40) then
 			return temp -- valid minion
-		end
-	end
-	for l, minion in pairs(JungleMinionManager.objects) do
-		if minion ~= nil and 
-		minion.valid and 
-		Minions and GetDistance(Minions) < player.range then
-			return minion
 		end
 	end
 	return nil
