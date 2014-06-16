@@ -4,7 +4,7 @@
 
 
 --- [[Info]] ---
-local version = 0.18
+local version = 0.19
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -60,7 +60,7 @@ local _Objects = 0
 function CountObjects(objects)
 	local n = 0
     for i, object in ipairs(objects) do
-        if GetDistance(myHero.visionPos, object) <= (player.range + 40) then
+        if GetDistance(myHero.visionPos, object) <= (player.range + 100) then
             n = n + 1
         end
     end
@@ -112,20 +112,20 @@ function findTargetOtherThan(target)
 	local temp
 	for i = 0, heroManager.iCount, 1 do
 		temp = heroManager:getHero(i)
-		if temp.team ~= player.team and temp ~= target and ValidTarget(temp, player.range + 40) then
+		if temp.team ~= player.team and temp ~= target and ValidTarget(temp, player.range + 100) then
 			return temp -- valid hero
 		end
 	end
 	for k = 0, objManager.maxObjects do
 		temp = objManager:GetObject(k)
-		if temp and temp.name:find("Minion_") ~= nil and temp ~= target and ValidTarget(temp, player.range + 40) then
+		if temp and temp.name:find("Minion_") ~= nil and temp ~= target and ValidTarget(temp, player.range + 100) then
 			return temp -- valid minion
 		end
 	end
 	for l, minion in pairs(JungleMinions.objects) do
 		temp = minion
 		if temp ~= nil and 
-		temp.valid and GetDistance(temp) < (player.range + 40) and temp ~= target then
+		temp.valid and GetDistance(temp) < (player.range + 100) and temp ~= target then
 			return minion
 		end
 	end
