@@ -4,7 +4,7 @@
 --- [[Info]] ---
 local version = 0.02
 local AUTOUPDATE = true
-local SCRIPT_NAME = "100%Crit"
+local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
