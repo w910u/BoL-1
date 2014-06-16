@@ -2,7 +2,7 @@
 -- Jire - For basic script and idea
 
 --- [[Info]] ---
-local version = 0.13
+local version = 0.14
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -117,8 +117,9 @@ function findTargetOtherThan(target)
 		end
 	end
 	for l, minion in pairs(JungleMinions.objects) do
-		if minion ~= nil and 
-		minion.valid and GetDistance(minion) < player.range then
+		temp = minion
+		if temp ~= nil and 
+		temp.valid and GetDistance(temp) < player.range and temp ~= target then
 			return minion
 		end
 	end
