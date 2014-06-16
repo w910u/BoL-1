@@ -1,8 +1,9 @@
 -- Credits:
--- Jire - For basic script and idea
+-- TheMaynard  - For the idea
+-- Jiro - For topic on forum)
 
 --- [[Info]] ---
-local version = 0.14
+local version = 0.15
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
