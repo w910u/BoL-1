@@ -34,8 +34,7 @@ function OnLoad()
 	Menu = scriptConfig("OnlyCritical", "OnlyCritical")
 	Menu:addParam("enable", "Enable script?", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("I"))
 	Menu:addParam("critChance", "Minimum Crititcal Chance", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
-	Menu:addParam("minTarg", "Targets In Range For Deactivate", SCRIPT_PARAM_SLICE, 1, 0, 5, 1)
-	Menu:addParam("Print", "Print to chat number of targets", SCRIPT_PARAM_ONKEYDOWN, false, string.byte("L"))
+	Menu:addParam("MinObj", "Minimum Targets For Script Active", SCRIPT_PARAM_SLICE, 1, 1, 5, 1)
 	DManager:CreateCircle(myHero, SOWi:MyRange(), 1, {255, 255, 255, 255}):AddToMenu(Menu, "AA Range", true, true, true)
 	
 	Menu:addSubMenu("Orbwalking", "Orbwalking")
@@ -44,24 +43,24 @@ function OnLoad()
 	Menu:addSubMenu("Target selector", "STS")
 		STS:AddToMenu(Menu.STS)
 	
-	EnemyMinions = minionManager(MINION_ENEMY, 1000, player, MINION_SORT_HEALTH_ASC)
+	EnemyMinions = minionManager(MINION_ENEMY, player.range, player, MINION_SORT_HEALTH_ASC)
+	-- JungleMinions = minionManager(MINION_JUNGLE, player.range, player, MINION_SORT_MAXHEALTH_DEC)
 	
 	PrintChat("<font color=\"#FFFFFF\">Only<font color=\"#FE642E\">Critical<font color=\"#04B404\"> has been loaded")
 end
 
 local deac = 0
-local obj = 0
+local Objects = 0
 
 function CountObjects()
-	obj = 0
+	local obj = 0
 	for k = 0, objManager.maxObjects do
 		temp = objManager:GetObject(k)
 		if temp and temp.team ~= myHero.team and ValidTarget(temp, player.range + 40) then
 			obj = obj + 1
 		end
 	end
-		PrintChat(obj)
-	
+	return obj
 	-- CountObjectsNearPos(myHero, player.range, player.range, SelectUnits(GetEnemyHeroes(), function(t) return ValidTarget(t) end))
 end
 
@@ -69,20 +68,22 @@ end
 function OnTick()
 	if player.dead or GetGame().isOver then return end
 	EnemyMinions:update()
-	if Menu.Print then 
-		CountObjects()
-	end
+	-- JungleMinions:update()
 end
 
 function OnProcessSpell(unit, spell)
 	if not Menu.enable or player.critChance < (Menu.critChance / 100) or spell.target == nil or spell.target.name:find("Turret_") ~= nil or deac == 1 then
 		return
 	end
+	
+	if (CountObjectsNearPos(myHero.visionPos, player.range, player.range, SelectUnits(GetEnemyHeroes(), function(t) return ValidTarget(t) end)) + CountObjectsNearPos(myHero.visionPos, player.range, player.range, SelectUnits(EnemyMinions(), function(t) return ValidTarget(t) end))) <= 1 then
+		return
+	end
+	
 	if unit.isMe and spell.name:find("BasicAttack") ~= nil then
 		player:HoldPosition()
 		target = findTargetOtherThan(spell.target)
 		if target ~= nil then
-			CountObjects()
 			player:Attack(target)
 		else
 		end
