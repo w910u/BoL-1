@@ -1,6 +1,6 @@
 -- Credits:
 -- TheMaynard  - For the idea
--- Jiro - For topic on forum)
+-- Jire - For topic on forum)
 
 --- [[Info]] ---
 local version = 0.15
