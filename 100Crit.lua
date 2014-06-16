@@ -44,31 +44,30 @@ function OnLoad()
 		STS:AddToMenu(Menu.STS)
 	
 	EnemyMinions = minionManager(MINION_ENEMY, player.range, player, MINION_SORT_HEALTH_ASC)
-	-- JungleMinions = minionManager(MINION_JUNGLE, player.range, player, MINION_SORT_MAXHEALTH_DEC)
+	JungleMinions = minionManager(MINION_JUNGLE, player.range, player, MINION_SORT_MAXHEALTH_DEC)
 	
 	PrintChat("<font color=\"#FFFFFF\">Only<font color=\"#FE642E\">Critical<font color=\"#04B404\"> has been loaded")
 end
 
 local deac = 0
-local Objects = 0
+local _Objects = 0
 
-function CountObjects()
-	local obj = 0
-	for k = 0, objManager.maxObjects do
-		temp = objManager:GetObject(k)
-		if temp and temp.team ~= myHero.team and ValidTarget(temp, player.range) then
-			obj = obj + 1
-		end
-	end
-	return obj
-	-- CountObjectsNearPos(myHero, player.range, player.range, SelectUnits(GetEnemyHeroes(), function(t) return ValidTarget(t) end))
+function CountObjects(objects)
+	local n = 0
+    for i, object in ipairs(objects) do
+        if GetDistance(myHero.visionPos, object) <= player.range then
+            n = n + 1
+        end
+    end
+
+    return n
 end
 
 
 function OnTick()
 	if player.dead or GetGame().isOver then return end
 	EnemyMinions:update()
-	-- JungleMinions:update()
+	JungleMinions:update()
 end
 
 function OnProcessSpell(unit, spell)
@@ -76,8 +75,8 @@ function OnProcessSpell(unit, spell)
 		return
 	end
 	
-	Objects = CountObjects()	
-	if Objects <= 1 then
+	_Objects = CountObjects(GetEnemyHeroes()) + CountObjects(EnemyMinions.objects) + CountObjects(JungleMinions.objects) 	
+	if _Objects <= 1 then
 		return
 	end
 	
