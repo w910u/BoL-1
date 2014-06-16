@@ -4,7 +4,7 @@
 
 
 --- [[Info]] ---
-local version = 0.19
+local version = 0.20
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -48,8 +48,8 @@ function OnLoad()
 	Menu:addSubMenu("Target selector", "STS")
 		STS:AddToMenu(Menu.STS)
 	
-	EnemyMinions = minionManager(MINION_ENEMY, player.range, player, MINION_SORT_HEALTH_ASC)
-	JungleMinions = minionManager(MINION_JUNGLE, player.range, player, MINION_SORT_MAXHEALTH_DEC)
+	EnemyMinions = minionManager(MINION_ENEMY, SOWi:MyRange(), player, MINION_SORT_HEALTH_ASC)
+	JungleMinions = minionManager(MINION_JUNGLE, SOWi:MyRange(), player, MINION_SORT_MAXHEALTH_DEC)
 	
 	PrintChat("<font color=\"#FFFFFF\">Only<font color=\"#FE642E\">Critical<font color=\"#04B404\"> has been loaded")
 end
@@ -60,7 +60,7 @@ local _Objects = 0
 function CountObjects(objects)
 	local n = 0
     for i, object in ipairs(objects) do
-        if GetDistance(myHero.visionPos, object) <= (player.range + 100) then
+        if GetDistance(myHero.visionPos, object) <= (SOWi:MyRange() + 40) then
             n = n + 1
         end
     end
@@ -79,7 +79,7 @@ function OnTick()
 end
 
 -- function Combo()
-	-- local AATarget = STS:GetTarget(player.range)
+	-- local AATarget = STS:GetTarget(SOWi:MyRange())
 	-- if AATarget then
 		-- player:Attack(target)
 	-- end
@@ -112,20 +112,20 @@ function findTargetOtherThan(target)
 	local temp
 	for i = 0, heroManager.iCount, 1 do
 		temp = heroManager:getHero(i)
-		if temp.team ~= player.team and temp ~= target and ValidTarget(temp, player.range + 100) then
+		if temp.team ~= player.team and temp ~= target and ValidTarget(temp, SOWi:MyRange() + 40) then
 			return temp -- valid hero
 		end
 	end
 	for k = 0, objManager.maxObjects do
 		temp = objManager:GetObject(k)
-		if temp and temp.name:find("Minion_") ~= nil and temp ~= target and ValidTarget(temp, player.range + 100) then
+		if temp and temp.name:find("Minion_") ~= nil and temp ~= target and ValidTarget(temp, SOWi:MyRange() + 40) then
 			return temp -- valid minion
 		end
 	end
 	for l, minion in pairs(JungleMinions.objects) do
 		temp = minion
 		if temp ~= nil and 
-		temp.valid and GetDistance(temp) < (player.range + 100) and temp ~= target then
+		temp.valid and GetDistance(temp) < (SOWi:MyRange() + 40) and temp ~= target then
 			return minion
 		end
 	end
