@@ -4,7 +4,7 @@
 
 
 --- [[Info]] ---
-local version = 0.16
+local version = 0.17
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -36,7 +36,7 @@ function OnLoad()
 	Menu = scriptConfig("OnlyCritical", "OnlyCritical")
 	Menu:addParam("enable", "Enable script?", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("I"))
 	Menu:addParam("TargSelect", "Select Good Target (Bind Orbwalker Carry Me Hotkey)", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("K"))
-	Munu:addParam("OnlyJungle", "Only Jungle Creeps", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("J"))
+	Menu:addParam("OnlyJungle", "Only Jungle Creeps", SCRIPT_PARAM_ONKEYTOGGLE, false, string.byte("J"))
 	Menu:permaShow("enable")
 	Menu:addParam("critChance", "Minimum Crititcal Chance", SCRIPT_PARAM_SLICE, 30, 0, 100, 0)
 	-- Menu:addParam("MinObj", "Minimum Targets For Script Active", SCRIPT_PARAM_SLICE, 1, 1, 5, 1)
