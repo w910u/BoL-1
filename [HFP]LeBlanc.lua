@@ -1,9 +1,33 @@
---[ [HFP]DarkAlex LeBlanc Combo ]--
+--[[
+	LeBlanc Combo 1.3
+		by eXtragoZ
+
+	Features:
+		- Full combo: Items -> Q -> R (Mimic Q) -> W -> E
+		- Supports: Deathfire Grasp, Liandry's Torment, Blackfire Torch, Bilgewater Cutlass, Hextech Gunblade, Blade of the Ruined King, Sheen, Trinity, Lich Bane, Iceborn Gauntlet, Shard of True Ice, Randuin's Omen and Ignite
+		- Harass mode: Q
+		- Informs where will use E / default off
+		- Checks minion collision for E
+		- The first circle is the range of Q, the second circle is the range of Q+W
+		- Mark killable target with a combo
+		- Target configuration
+		- Press shift to configure
+
+	Explanation of the marks:
+		Green circle: Marks the current target to which you will do the combo
+		Blue circle: Mark a target that can be killed with a combo, if all the skills were available
+		Red circle: Mark a target that can be killed using items + 2 hits + Q x2 + Q mark x2 + W + E + E Root + R (Mimic Q) + ignite
+		2 Red circles: Mark a target that can be killed using items + 1 hit + Q + Q mark + W + E + E Root + R (Mimic Q) + ignite
+		3 Red circles: Mark a target that can be killed using items (without on hit items) + Q + Q mark + E + R (Mimic Q)
+]]
+--leBlanc_shackle_mis.troy
+--1480
+--250
 if myHero.charName ~= "Leblanc" then return end
 --- [[Info]] ---
 local version = 0.03
 local AUTOUPDATE = true
-local SCRIPT_NAME = "[HFP]Cassio"
+local SCRIPT_NAME = "[HFP]LeBlanc"
 --- [[Update + Libs]] ---
 local SOURCELIB_URL = "https://raw.github.com/TheRealSource/public/master/common/SourceLib.lua"
 local SOURCELIB_PATH = LIB_PATH.."SourceLib.lua"
@@ -22,7 +46,7 @@ RequireI:Add("vPrediction", "https://raw.githubusercontent.com/AWABoL150/BoL/mas
 RequireI:Add("SOW", "https://raw.githubusercontent.com/AWABoL150/BoL/master/Honda7-Scripts/common/SOW.lua")
 RequireI:Check()
 if RequireI.downloadNeeded == true then return end	
-local MainCombo = {_Q, _Q, _W, _E, _E, _R, _IGNITE}
+local MainCombo = {_Q, _R, _W, _E, _IGNITE}
 
 --Spell Data
 local Ranges = {[_Q] = 700, [_W] = 600, [_E] = 925}
@@ -80,18 +104,21 @@ function OnLoad()
 	Menu:addSubMenu("Combo", "Combo")
 		Menu.Combo:addParam("scriptActive", "Combo", SCRIPT_PARAM_ONKEYDOWN, false, 32)
 		Menu.Combo:addParam("UseIgnite", "Use ignite if the target is killable", SCRIPT_PARAM_ONOFF, true)
+		Menu.Combo:addParam("UseItems", "Use Items In Combo", SCRIPT_PARAM_ONOFF, true)
 	Menu:addSubMenu("Harass", "Harass")
 		-- Menu.Harass:addParam("Harass", "Harass", SCRIPT_PARAM_ONKEYDOWN, false, 84)
 		Menu.Harass:addParam("UseQ", "Harass using Q", SCRIPT_PARAM_ONOFF, true)
 		Menu.Harass:addParam("UseW", "Harass using W", SCRIPT_PARAM_ONOFF, false)
 		Menu.Harass:addParam("UseE", "Harass using E on poisoned", SCRIPT_PARAM_ONOFF, true)
 		Menu.Harass:addParam("Enabled", "Harass! (hold)", SCRIPT_PARAM_ONKEYDOWN, false,   string.byte("C"))
-		Menu.Harass:addParam("Enabled2", "Harass! (toggle)", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("Y"))
+		Menu.Harass:addParam("Enabled2", "Harass! (toggle)", SCRIPT_PARAM_ONKEYTOGGLE, false,   string.byte("I"))
 	Menu:addSubMenu("Jungle Farm", "JungleFarm")
 		Menu.JungleFarm:addParam("UseQ", "Use Q", SCRIPT_PARAM_ONOFF, true)
 		Menu.JungleFarm:addParam("UseW", "Use W", SCRIPT_PARAM_ONOFF, false)
 		Menu.JungleFarm:addParam("UseE", "Use E", SCRIPT_PARAM_ONOFF, false)
 		Menu.JungleFarm:addParam("Enabled", "Farm jungle!", SCRIPT_PARAM_ONKEYDOWN, false,   string.byte("V"))
+	Menu:addSubMenu("Prediction", "Predict")
+		Menu.Predict:addParam("VPHitChance","    VPrediction HitChance",SCRIPT_PARAM_LIST,3,{"[0]Target Position","[1]Low Hitchance","[2]High Hitchance","[3]Target slowed/close","[4]Target immobile","[5]Target Dashing"})
 	--[ PermaShow ]--
 	Menu.Combo:permaShow("scriptActive")
 	Menu.Harass:permaShow("Enabled2")
@@ -115,23 +142,42 @@ function OnLoad()
 	print("<font color='#ff8000'> >> LeBlanc Script loaded! </font>")
 end
 
+function ChkItems()
+	--- Slots for Items ---
+	--->
+		rstSlot, ssSlot, swSlot, vwSlot =			GetInventorySlotItem(2045),
+													GetInventorySlotItem(2049),
+													GetInventorySlotItem(2044),
+													GetInventorySlotItem(2043)
+		dfgSlot, hxgSlot, bwcSlot, brkSlot =		GetInventorySlotItem(3128),
+													GetInventorySlotItem(3146),
+													GetInventorySlotItem(3144),
+													GetInventorySlotItem(3153)
+		hpSlot, fskSlot =							GetInventorySlotItem(2003),
+													GetInventorySlotItem(2041)
+		znaSlot, wgtSlot, bftSlot, liandrysSlot =	GetInventorySlotItem(3157),
+													GetInventorySlotItem(3090),
+													GetInventorySlotItem(3188),
+													GetInventorySlotItem(3151)
+	---<
+	--- Slots for Items ---
+	--- Checks if Active Items are Ready ---
+	--->
+		dfgReady		= (dfgSlot		~= nil and myHero:CanUseSpell(dfgSlot)		== READY)
+		hxgReady		= (hxgSlot		~= nil and myHero:CanUseSpell(hxgSlot)		== READY)
+		bwcReady		= (bwcSlot		~= nil and myHero:CanUseSpell(bwcSlot)		== READY)
+		brkReady		= (brkSlot		~= nil and myHero:CanUseSpell(brkSlot)		== READY)
+		znaReady		= (znaSlot		~= nil and myHero:CanUseSpell(znaSlot)		== READY)
+		wgtReady		= (wgtSlot		~= nil and myHero:CanUseSpell(wgtSlot)		== READY)
+		bftReady		= (bftSlot		~= nil and myHero:CanUseSpell(bftSlot)		== READY)
+		lyandrisReady	= (liandrysSlot ~= nil and myHero:CanUseSpell(liandrysSlot) == READY)
+	---<
+	--- Checks if Items are Ready ---
+end
+
 function OnTick()
-	--Prediction__OnTick()
-	DFGSlot, HXGSlot, BWCSlot = GetInventorySlotItem(3128), GetInventorySlotItem(3146), GetInventorySlotItem(3144)
-	SheenSlot, TrinitySlot, LBSlot = GetInventorySlotItem(3057), GetInventorySlotItem(3078), GetInventorySlotItem(3100)
-	IGSlot, LTSlot, BTSlot = GetInventorySlotItem(3025), GetInventorySlotItem(3151), GetInventorySlotItem(3188)
-	STISlot, ROSlot, BRKSlot = GetInventorySlotItem(3092),GetInventorySlotItem(3143),GetInventorySlotItem(3153)
-	QREADY = (myHero:CanUseSpell(_Q) == READY)
-	WREADY = (myHero:CanUseSpell(_W) == READY)
-	EREADY = (myHero:CanUseSpell(_E) == READY)
-	RREADY = (myHero:CanUseSpell(_R) == READY)
-	DFGREADY = (DFGSlot ~= nil and myHero:CanUseSpell(DFGSlot) == READY)
-	HXGREADY = (HXGSlot ~= nil and myHero:CanUseSpell(HXGSlot) == READY)
-	BWCREADY = (BWCSlot ~= nil and myHero:CanUseSpell(BWCSlot) == READY)
-	STIREADY = (STISlot ~= nil and myHero:CanUseSpell(STISlot) == READY)
-	ROREADY = (ROSlot ~= nil and myHero:CanUseSpell(ROSlot) == READY)
-	BRKREADY = (BRKSlot ~= nil and myHero:CanUseSpell(BRKSlot) == READY)
-	IREADY = (ignite ~= nil and myHero:CanUseSpell(ignite) == READY)
+	ChkItems()
+	EnemyMinions:update()
 	if myHero:GetSpellData(_R).name == "LeblancChaosOrbM" then rmimic = 1
 	elseif myHero:GetSpellData(_R).name == "LeblancSlideM" then rmimic = 2
 	elseif myHero:GetSpellData(_R).name == "leblancslidereturnm" then rmimic = 3
@@ -141,7 +187,7 @@ function OnTick()
 	
 	SOWi:EnableAttacks()
 
-	if Menu.Combo.Enabled then
+	if Menu.Combo.scriptActive then
 		Combo()
 	elseif Menu.Harass.Enabled or Menu.Harass.Enabled2 then
 		Harass()
@@ -207,8 +253,70 @@ function Combo()
 		end
 	end
 
-	UseSpells(Menu.Combo.UseQ, Menu.Combo.UseW, Menu.Combo.UseE, Menu.Combo.UseR)
+	UseSpells(true, true, true, true, Menu.Combo.UseItems)
 	SetAttacks()
+end
+
+function Harass()
+	VP.ShotAtMaxRange = true
+	UseSpells(Menu.Harass.UseQ, Menu.Harass.UseW, Menu.Harass.UseE, false)
+	VP.ShotAtMaxRange = false
+end
+
+function SetAttacks()
+	SOWi:DisableAttacks()
+	if not Q:IsReady() and not W:IsReady() and not E:IsReady() then
+		SOWi:EnableAttacks()
+	end
+end
+
+function UseSpells(UseQ, UseW, UseE, UseR, UseItems)
+	--Q
+	if UseQ then
+		local Qtarget = STS:GetTarget(Ranges[_Q])
+		if Qtarget then
+			Q:Cast(Qtarget)
+			rmimic = 1
+		end
+	end
+	
+	--R
+	if UseR then
+		local Rtarget = STS:GetTarget(Ranges[_Q])
+		if Rtarget and rmimic == 1 then
+			R:Cast(Rtarget)
+		end
+	end
+	
+	--W
+	if UseW and wstate == 1 then
+		Wtarget = STS:GetTarget(Ranges[_W] + Widths[_W])
+		if Wtarget then
+			W:Cast(Wtarget)
+			wstate = 2
+		end
+	end
+
+	--E
+	if UseE then
+		local Etarget = STS:GetTarget(Ranges[_E])
+		if Etarget then
+			local CastPosition,HitChance,Position = VP:GetLineCastPosition(Etarget, Delays[_E], Widths[_E], Ranges[_E], Speeds[_E],myHero)
+			if CastPosition ~= nil and HitChance >= (Menu.Predict.VPHitChance - 1) then
+					SpellCast(_E,CastPosition)
+			end
+		end
+	end
+	
+	--Items
+	if UseItems then
+		local ItemsTarget = STS:GetTarget(Ranges[_Q])
+		if dfgReady and GetDistanceSqr(ItemsTarget) <= 600*600 then CastSpell(dfgSlot, ItemsTarget) end
+		if bftReady and GetDistanceSqr(ItemsTarget) <= 600*600 then CastSpell(bftSlot, ItemsTarget) end
+		if hxgReady and GetDistanceSqr(ItemsTarget) <= 600*600 then CastSpell(hxgSlot, ItemsTarget) end
+		if bwcReady and GetDistanceSqr(ItemsTarget) <= 450*450 then CastSpell(bwcSlot, ItemsTarget) end
+		if brkReady and GetDistanceSqr(ItemsTarget) <= 450*450 then CastSpell(brkSlot, ItemsTarget) end
+	end
 end
 
 function OnDraw()
@@ -220,6 +328,21 @@ function OnDraw()
 				DrawCircle(object.x, object.y, object.z, 92, 0xFFFFFF)
 			end
 		end
+end
+
+function SetAttacks()
+	SOWi:DisableAttacks()
+	if not Q:IsReady() and not W:IsReady() and not E:IsReady() then
+		SOWi:EnableAttacks()
+	end
+end
+
+function SpellCast(spellSlot,castPosition)
+	if VIP_USER and Menu.Extra.Packet then
+		Packet("S_CAST", {spellId = spellSlot, fromX = castPosition.x, fromY = castPosition.z, toX = castPosition.x, toY = castPosition.z}):send()
+	else
+		CastSpell(spellSlot,castPosition.x,castPosition.z)
+	end
 end
 -- function OnSendChat(msg)
 	-- ts:OnSendChat(msg, "pri")
