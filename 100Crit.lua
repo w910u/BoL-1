@@ -2,7 +2,7 @@
 -- Jire - For basic script and idea
 
 --- [[Info]] ---
-local version = 0.02
+local version = 0.03
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100Crit"
 --- [[Update + Libs]] ---
@@ -56,7 +56,7 @@ function CountObjects()
 	local obj = 0
 	for k = 0, objManager.maxObjects do
 		temp = objManager:GetObject(k)
-		if temp and temp.team ~= myHero.team and ValidTarget(temp, player.range + 40) then
+		if temp and temp.team ~= myHero.team and ValidTarget(temp, player.range) then
 			obj = obj + 1
 		end
 	end
@@ -76,7 +76,8 @@ function OnProcessSpell(unit, spell)
 		return
 	end
 	
-	if (CountObjectsNearPos(myHero.visionPos, player.range, player.range, SelectUnits(GetEnemyHeroes(), function(t) return ValidTarget(t) end)) + CountObjectsNearPos(myHero.visionPos, player.range, player.range, SelectUnits(EnemyMinions(), function(t) return ValidTarget(t) end))) <= 1 then
+	Objects = CountObjects()	
+	if Objects <= 1 then
 		return
 	end
 	
