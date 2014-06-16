@@ -2,7 +2,7 @@
 -- Jire - For basic script and idea
 
 --- [[Info]] ---
-local version = 0.01
+local version = 0.02
 local AUTOUPDATE = true
 local SCRIPT_NAME = "100%Crit"
 --- [[Update + Libs]] ---
